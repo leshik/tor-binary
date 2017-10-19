@@ -10,7 +10,7 @@
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>geoip</artifactId>
+    <artifactId>tor-binary-geoip</artifactId>
     <packaging>pom</packaging>
 
     <build>
@@ -75,11 +75,7 @@
                             <descriptors>
                                 <descriptor>src/main/assembly/geoip.xml</descriptor>
                             </descriptors>
-                            <attach>false
-                            </attach> <!-- don't attach because we override final name and that would not being unique in repository -->
-                            <finalName>geoip</finalName> <!-- misuse as folder name destination -->
-                            <appendAssemblyId>true</appendAssemblyId>
-                        </configuration>
+                          </configuration>
                     </execution>
                 </executions>
             </plugin>

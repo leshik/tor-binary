@@ -10,7 +10,7 @@
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>linux64</artifactId>
+    <artifactId>tor-binary-linux64</artifactId>
     <packaging>pom</packaging>
 
     <build>
@@ -75,10 +75,6 @@
                             <descriptors>
                                 <descriptor>src/main/assembly/linux64.xml</descriptor>
                             </descriptors>
-                            <attach>false
-                            </attach> <!-- don't attach because we override final name and that would not being unique in repository -->
-                            <finalName>tor</finalName>
-                            <appendAssemblyId>true</appendAssemblyId>
                         </configuration>
                     </execution>
                 </executions>
