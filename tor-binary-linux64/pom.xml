@@ -6,7 +6,7 @@
     <parent>
     <groupId>com.cedricwalter</groupId>
     <artifactId>tor-binary</artifactId>
-    <version>7.0.2-SNAPSHOT</version>
+    <version>7.0.6</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
@@ -75,6 +75,10 @@
                             <descriptors>
                                 <descriptor>src/main/assembly/linux64.xml</descriptor>
                             </descriptors>
+                            <attach>false
+                            </attach> <!-- don't attach because we override final name and that would not being unique in repository -->
+                            <finalName>tor</finalName>
+                            <appendAssemblyId>true</appendAssemblyId>
                         </configuration>
                     </execution>
                 </executions>
