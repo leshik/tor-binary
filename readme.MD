@@ -1,13 +1,27 @@
 # Tor Binary files
 
-Package Tor files from (Tor Browser project)[https://github.com/TheTorProject/gettorbrowser] in a way that can use by any java projects
+Package Tor files from [Tor Browser project](https://github.com/TheTorProject/gettorbrowser) in a way that can use by any java projects
 
-change here to get the desired version,
 
-This project verify GPG signature, unpack Tor Browser and package tor binary for each platform.
+
+# Install
+
+require GPG and 7Zip installed
+
+```apt-get install -y p7zip-full```
+
+Change in pom to get the desired version
+
+```<torbrowser.version>7.0.6</torbrowser.version>```
+
+run ```maven install```
+
+This project verify GPG signature, unpack Tor Browser and package TOR binary for each platform.
 
 
 # Usage
+
+Tor binary are simple zip files:
 
 ```
 <dependency>
