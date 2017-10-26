@@ -80,10 +80,6 @@
                             <descriptors>
                                 <descriptor>src/main/assembly/macos.xml</descriptor>
                             </descriptors>
-                            <attach>false
-                            </attach> <!-- don't attach because we override final name and that would not being unique in repository -->
-                            <finalName>tor</finalName>
-                            <appendAssemblyId>true</appendAssemblyId>
                         </configuration>
                     </execution>
                 </executions>
