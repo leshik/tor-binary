@@ -15,7 +15,7 @@
 
         requirement are: gpg and 7z in path
         -->
-        <torbrowser.version>7.0.6</torbrowser.version>
+        <torbrowser.version>7.0.8</torbrowser.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
