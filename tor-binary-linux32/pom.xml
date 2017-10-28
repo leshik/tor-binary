@@ -6,7 +6,7 @@
     <parent>
         <groupId>com.cedricwalter</groupId>
         <artifactId>tor-binary</artifactId>
-        <version>7.0.8</version>
+        <version>7.0.7</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
@@ -24,6 +24,8 @@
                         <phase>generate-resources</phase>
                         <configuration>
                             <target>
+                                <taskdef resource="org/apache/ant/compress/antlib.xml"
+                                         classpathref="maven.plugin.classpath"/>
 
                                 <get
                                     src="https://github.com/TheTorProject/gettorbrowser/releases/download/v${torbrowser.version}/tor-browser-linux32-${torbrowser.version}_en-US.tar.xz"
