@@ -6,12 +6,12 @@
     <parent>
         <groupId>com.cedricwalter</groupId>
         <artifactId>tor-binary</artifactId>
-        <version>7.0.6</version>
+        <version>7.0.8</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
     <artifactId>tor-binary-windows</artifactId>
-    <packaging>pom</packaging>
+    <packaging>jar</packaging>
 
     <build>
         <plugins>
@@ -57,35 +57,18 @@
                                         line="x ${project.build.directory}/torbrowser-install-${torbrowser.version}_en-US.exe -o${project.build.directory}/windows -aoa Browser/TorBrowser/Tor/*"></arg>
                                 </exec>
 
-                                <!-- unpack geoip6 and geoip -->
-                                <exec executable="7z" failonerror="true">
-                                    <arg
-                                        line="x ${project.build.directory}/torbrowser-install-${torbrowser.version}_en-US.exe -o${project.build.directory}/geoip -aoa Browser/TorBrowser/Data/Tor/*"></arg>
-                                </exec>
+                                <tar destfile="${project.build.directory}/win32.tar">
+                                    <tarfileset dir="${project.build.directory}/windows/Browser/TorBrowser/Tor/"
+                                    />
+                                </tar>
+                                <xz src="${project.build.directory}/win32.tar"
+                                    destfile="${project.basedir}/src/main/resources/native/windows/x86/tor.tar.xz"/>
+
                             </target>
                         </configuration>
                         <goals>
                             <goal>run</goal>
                         </goals>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <plugin>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <version>3.1.0</version>
-                <executions>
-                    <execution>
-                        <id>package-windows</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>single</goal>
-                        </goals>
-                        <configuration>
-                            <descriptors>
-                                <descriptor>src/main/assembly/windows.xml</descriptor>
-                            </descriptors>
-                        </configuration>
                     </execution>
                 </executions>
             </plugin>
@@ -96,10 +79,7 @@
                     <artifactId>maven-antrun-plugin</artifactId>
                     <version>1.8</version>
                 </plugin>
-
             </plugins>
         </pluginManagement>
-
-
     </build>
 </project>
