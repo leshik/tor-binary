@@ -6,12 +6,12 @@
     <parent>
         <groupId>com.cedricwalter</groupId>
         <artifactId>tor-binary</artifactId>
-        <version>7.0.6</version>
+        <version>7.0.7</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
     <artifactId>tor-binary-macos</artifactId>
-    <packaging>pom</packaging>
+    <packaging>jar</packaging>
 
     <build>
         <plugins>
@@ -57,30 +57,18 @@
                                     <arg
                                         line="x ${project.build.directory}/TorBrowser-${torbrowser.version}-osx64_en-US.dmg -o${project.build.directory}/osx -aoa TorBrowser.app/Contents/MacOS/Tor/*"></arg>
                                 </exec>
+
+                                <tar destfile="${project.build.directory}/osx64.tar">
+                                    <tarfileset dir="${project.build.directory}/osx/TorBrowser.app/Contents/MacOS/Tor/"
+                                    />
+                                </tar>
+                                <xz src="${project.build.directory}/osx64.tar"
+                                    destfile="${project.basedir}/src/main/resources/native/osx/x64/tor.tar.xz"/>
                             </target>
                         </configuration>
                         <goals>
                             <goal>run</goal>
                         </goals>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <plugin>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <version>3.1.0</version>
-                <executions>
-                    <execution>
-                        <id>package-osx</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>single</goal>
-                        </goals>
-                        <configuration>
-                            <descriptors>
-                                <descriptor>src/main/assembly/macos.xml</descriptor>
-                            </descriptors>
-                        </configuration>
                     </execution>
                 </executions>
             </plugin>

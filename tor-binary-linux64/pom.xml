@@ -6,33 +6,24 @@
     <parent>
         <groupId>com.cedricwalter</groupId>
         <artifactId>tor-binary</artifactId>
-        <version>7.0.6</version>
+        <version>7.0.7</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
     <artifactId>tor-binary-linux64</artifactId>
-    <packaging>pom</packaging>
+    <packaging>jar</packaging>
 
     <build>
         <plugins>
             <plugin>
                 <artifactId>maven-antrun-plugin</artifactId>
                 <version>1.8</version>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.apache.ant</groupId>
-                        <artifactId>ant-compress</artifactId>
-                        <version>1.4</version>
-                    </dependency>
-                </dependencies>
                 <executions>
                     <execution>
-                        <id>unpack-linux64</id>
+                        <id>get-and-verify</id>
                         <phase>generate-resources</phase>
                         <configuration>
-                            <tasks>
-                                <taskdef resource="org/apache/ant/compress/antlib.xml"
-                                         classpathref="maven.plugin.classpath"/>
+                            <target>
 
                                 <get
                                     src="https://github.com/TheTorProject/gettorbrowser/releases/download/v${torbrowser.version}/tor-browser-linux64-${torbrowser.version}_en-US.tar.xz"
@@ -47,16 +38,7 @@
                                     <arg
                                         line="--auto-key-locate keyserver --keyserver pgp.mit.edu --keyserver-options auto-key-retrieve --verify ${project.build.directory}/tor-browser-linux64-${torbrowser.version}_en-US.tar.xz.asc ${project.build.directory}/tor-browser-linux64-${torbrowser.version}_en-US.tar.xz"></arg>
                                 </exec>
-
-                                <unxz
-                                    src="${project.build.directory}/tor-browser-linux64-${torbrowser.version}_en-US.tar.xz"
-                                    dest="${project.build.directory}/linuxx64.tar"
-
-                                />
-                                <untar src="${project.build.directory}/linuxx64.tar"
-                                       dest="${project.build.directory}/linuxx64/"
-                                />
-                            </tasks>
+                            </target>
                         </configuration>
                         <goals>
                             <goal>run</goal>
@@ -64,22 +46,20 @@
                     </execution>
                 </executions>
             </plugin>
-
             <plugin>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <version>3.1.0</version>
+                <groupId>org.berndpruenster</groupId>
+                <artifactId>archifilter-maven-plugin</artifactId>
+                <version>0.2</version>
                 <executions>
                     <execution>
-                        <id>package-linux64</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>single</goal>
-                        </goals>
+                        <phase>generate-resources</phase>
                         <configuration>
-                            <descriptors>
-                                <descriptor>src/main/assembly/linux64.xml</descriptor>
-                            </descriptors>
+                            <src>${project.build.directory}/tor-browser-linux64-${torbrowser.version}_en-US.tar.xz</src>
+                            <dst>${project.basedir}/src/main/resources/native/linux/x64/tor.tar.xz</dst>
                         </configuration>
+                        <goals>
+                            <goal>filter</goal>
+                        </goals>
                     </execution>
                 </executions>
             </plugin>
@@ -90,10 +70,7 @@
                     <artifactId>maven-antrun-plugin</artifactId>
                     <version>1.8</version>
                 </plugin>
-
             </plugins>
         </pluginManagement>
-
-
     </build>
 </project>

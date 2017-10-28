@@ -28,7 +28,7 @@ Tor binary are simple zip files:
     <groupId>com.cedricwalter</groupId>
     <artifactId>tor-binary-linux32</artifactId>
     <version>7.0.6</version>
-    <type>zip</type>
+    <type>tar.xz</type>
     <classifier>bin</classifier>
 </dependency>
 ```
@@ -37,7 +37,7 @@ Tor binary are simple zip files:
     <groupId>com.cedricwalter</groupId>
     <artifactId>tor-binary-linux64</artifactId>
     <version>7.0.6</version>
-    <type>zip</type>
+    <type>tar.xz</type>
     <classifier>bin</classifier>
 </dependency>
 ```
@@ -46,7 +46,7 @@ Tor binary are simple zip files:
     <groupId>com.cedricwalter</groupId>
     <artifactId>tor-binary-macos</artifactId>
     <version>7.0.6</version>
-    <type>zip</type>
+    <type>tar.xz</type>
     <classifier>bin</classifier>
 </dependency>
 ```
@@ -55,7 +55,7 @@ Tor binary are simple zip files:
     <groupId>com.cedricwalter</groupId>
     <artifactId>tor-binary-windows</artifactId>
     <version>7.0.6</version>
-    <type>zip</type>
+    <type>tar.xz</type>
     <classifier>bin</classifier>
 </dependency>
 ```
@@ -68,7 +68,7 @@ you may want to unpack these dependencies if required using
     <executions>
         <execution>
             <id>copy</id>
-            <phase>package</phase>
+            <phase>generate-resources</phase>
             <goals>
                 <goal>copy</goal>
             </goals>
@@ -78,13 +78,16 @@ you may want to unpack these dependencies if required using
                         <groupId>com.cedricwalter</groupId>
                         <artifactId>tor-binary-linux32</artifactId>
                         <version>${tor-binary.version}</version>
-                        <type>zip</type>
+                        <type>tar.xz</type>
                         <classifier>bin</classifier>
                         <overWrite>false</overWrite>
                         <outputDirectory>${project.build.directory}/classes/native/linux/x86
                         </outputDirectory>
-                        <destFileName>tor.zip</destFileName>
+                        <destFileName>tor.tar.xz</destFileName>
                     </artifactItem>
                  </artifactItems>
             </configuration>
+        </execution>
+    </executions>
+</plugin>
 ```
