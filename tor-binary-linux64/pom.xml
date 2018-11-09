@@ -6,7 +6,7 @@
     <parent>
         <groupId>com.cedricwalter</groupId>
         <artifactId>tor-binary</artifactId>
-        <version>8.0.3</version>
+        <version>${revision}</version>
     </parent>
 
     <properties>

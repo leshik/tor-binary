@@ -6,7 +6,7 @@
     <parent>
         <groupId>com.cedricwalter</groupId>
         <artifactId>tor-binary</artifactId>
-        <version>8.0.3</version>
+        <version>${revision}</version>
     </parent>
 
     <properties>
@@ -62,9 +62,12 @@
                                         line="x ${project.build.directory}/TorBrowser-${torbrowser.version}-osx64_en-US.dmg -o${project.build.directory}/osx -aoa *"></arg>
                                 </exec>
 
+                                <!-- tor 8 changed the directory structure of its osx binaries... -->
+                                <property name="path" value="${project.build.directory}/osx/Tor Browser.app/Contents/MacOS/Tor/"/>
+                                <!-- in case we want tor pre version 8, check for directory structure and set appropriate path -->
+                                <available file="${project.build.directory}/osx/TorBrowser.app" type="dir" property="path" value="${project.build.directory}/osx/TorBrowser.app/Contents/MacOS/Tor/"/>
                                 <tar destfile="${project.build.directory}/osx64.tar">
-                                    <tarfileset dir="${project.build.directory}/osx/Tor Browser.app/Contents/MacOS/Tor/"
-                                    />
+                                    <tarfileset dir="${path}"/>
                                 </tar>
                                 <xz src="${project.build.directory}/osx64.tar"
                                     destfile="${project.basedir}/src/main/resources/native/osx/x64/tor.tar.xz"/>
