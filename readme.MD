@@ -10,16 +10,58 @@ require GPG and 7Zip installed
 
 ```apt-get install -y p7zip-full```
 
-Change in pom to get the desired version
-
-```<torbrowser.version>7.0.6</torbrowser.version>```
-
-run ```maven install```
+run ```maven install -Drevision=your-tor-version-here```
 
 This project verify GPG signature, unpack Tor Browser and package TOR binary for each platform.
 
 
 # Usage
+
+In order to integrate this package into your maven project, you have to add
+```
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>1.8</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.apache.ant</groupId>
+                        <artifactId>ant-compress</artifactId>
+                        <version>1.4</version>
+                    </dependency>
+                </dependencies>
+                <executions>
+                    <execution>
+                        <id>fetch tor-binaries</id>
+                        <phase>generate-resources</phase>
+                        <configuration>
+                            <target>
+                                <taskdef resource="org/apache/ant/compress/antlib.xml"
+                                         classpathref="maven.plugin.classpath"/>
+
+                                <get
+                                    src="https://github.com/JesusMcCloud/tor-binary/archive/master.zip"
+                                    dest="${project.build.directory}/tor-binary.zip"
+                                    skipexisting="true"/>
+
+                                <unzip src="${project.build.directory}/tor-binary.zip" dest="${project.build.directory}/"/>
+
+                                <exec dir="${project.build.directory}/tor-binary-master/" executable="mvn" failonerror="true">
+                                    <arg line="install -Drevision=${tor-binary.version}"/>
+                                </exec>
+                            </target>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+```
+to your pom.xml. Note the `${tor-binary.version}` property!
 
 Tor binary are simple zip files:
 
