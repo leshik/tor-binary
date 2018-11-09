@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <parent>
+        <groupId>com.cedricwalter</groupId>
+        <artifactId>tor-binary</artifactId>
+        <version>8.0.3</version>
+    </parent>
+
+    <properties>
+        <release.dir>${project.basedir}/../release</release.dir>
+    </properties>
+
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>tor-binary-linux64</artifactId>
+    <packaging>jar</packaging>
+
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>1.8</version>
+                <executions>
+                    <execution>
+                        <id>get-and-verify</id>
+                        <phase>generate-resources</phase>
+                        <configuration>
+                            <target>
+
+                                <get
+                                    src="https://dist.torproject.org/torbrowser/${torbrowser.version}/tor-browser-linux64-${torbrowser.version}_en-US.tar.xz"
+                                    dest="${project.build.directory}/tor-browser-linux64-${torbrowser.version}_en-US.tar.xz"
+                                    skipexisting="true"/>
+                                <get
+                                    src="https://dist.torproject.org/torbrowser/${torbrowser.version}/tor-browser-linux64-${torbrowser.version}_en-US.tar.xz.asc"
+                                    dest="${project.build.directory}/tor-browser-linux64-${torbrowser.version}_en-US.tar.xz.asc"
+                                    skipexisting="true"/>
+
+                                <exec executable="gpg" failonerror="true">
+                                    <arg
+                                        line="--auto-key-locate keyserver --keyserver pgp.mit.edu --keyserver-options auto-key-retrieve --verify ${project.build.directory}/tor-browser-linux64-${torbrowser.version}_en-US.tar.xz.asc ${project.build.directory}/tor-browser-linux64-${torbrowser.version}_en-US.tar.xz"></arg>
+                                </exec>
+                            </target>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.berndpruenster</groupId>
+                <artifactId>archifilter-maven-plugin</artifactId>
+                <version>0.2</version>
+                <executions>
+                    <execution>
+                        <phase>generate-resources</phase>
+                        <configuration>
+                            <src>${project.build.directory}/tor-browser-linux64-${torbrowser.version}_en-US.tar.xz</src>
+                            <dst>${project.basedir}/src/main/resources/native/linux/x64/tor.tar.xz</dst>
+                        </configuration>
+                        <goals>
+                            <goal>filter</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <artifactId>maven-antrun-plugin</artifactId>
+                    <version>1.8</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+</project>
