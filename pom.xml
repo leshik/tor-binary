@@ -28,12 +28,12 @@
         </license>
     </licenses>
 
-    <repositories>
-        <repository>
+    <pluginRepositories>
+        <pluginRepository>
             <id>archifilter</id>
             <url>https://raw.githubusercontent.com/JesusMcCloud/archifilter-maven-plugin/0.2/release/</url>
-        </repository>
-    </repositories>
+        </pluginRepository>
+    </pluginRepositories>
 
     <issueManagement>
         <system>GitHub</system>
