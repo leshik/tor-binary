@@ -52,13 +52,20 @@
                                         line="--auto-key-locate keyserver --keyserver pgp.mit.edu --keyserver-options auto-key-retrieve --verify ${project.build.directory}/TorBrowser-${torbrowser.version}-osx64_en-US.dmg.asc ${project.build.directory}/TorBrowser-${torbrowser.version}-osx64_en-US.dmg"></arg>
                                 </exec>
 
-                                <!-- unpack Tor
-                                             x unpack
-                                             -o destination folder
-                                             -aoa Overwrite all existing files without prompt.
-                                             -->
-                                <un7z src="${project.build.directory}/TorBrowser-${torbrowser.version}-osx64_en-US.dmg"
-                                      dest="${project.build.directory}/osx" />
+                                <get
+                                  src="https://sourceforge.net/projects/p7zip/files/p7zip/16.02/p7zip_16.02_x86_linux_bin.tar.bz2/download"
+                                  dest="${project.build.directory}/p7zip.tar.bz2"
+                                  skipexisting="true"/>
+                                <bunzip2 src="${project.build.directory}/p7zip.tar.bz2" />
+                                <untar src="${project.build.directory}/p7zip.tar"
+                                       dest="${project.build.directory}/p7zip/" />
+
+                                <chmod dir="${project.build.directory}/p7zip/p7zip_16.02/bin/" perm="+x" includes="**/*"/>
+
+                                <exec executable="${project.build.directory}/p7zip/p7zip_16.02/bin/7z" failonerror="true">
+                                    <arg
+                                        line="x ${project.build.directory}/TorBrowser-${torbrowser.version}-osx64_en-US.dmg -o${project.build.directory}/osx -aoa *"></arg>
+                                </exec>
 
                                 <!-- tor 8 changed the directory structure of its osx binaries... -->
                                 <property name="path" value="${project.build.directory}/osx/Tor Browser.app/Contents/MacOS/Tor/"/>
