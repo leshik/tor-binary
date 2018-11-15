@@ -57,10 +57,8 @@
                                              -o destination folder
                                              -aoa Overwrite all existing files without prompt.
                                              -->
-                                <exec executable="7z" failonerror="true">
-                                    <arg
-                                        line="x ${project.build.directory}/TorBrowser-${torbrowser.version}-osx64_en-US.dmg -o${project.build.directory}/osx -aoa *"></arg>
-                                </exec>
+                                <un7z src="${project.build.directory}/TorBrowser-${torbrowser.version}-osx64_en-US.dmg"
+                                      dest="${project.build.directory}/osx" />
 
                                 <!-- tor 8 changed the directory structure of its osx binaries... -->
                                 <property name="path" value="${project.build.directory}/osx/Tor Browser.app/Contents/MacOS/Tor/"/>
