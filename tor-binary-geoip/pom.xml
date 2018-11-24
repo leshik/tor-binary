@@ -9,10 +9,6 @@
         <version>8.0.3</version>
     </parent>
 
-    <properties>
-        <release.dir>${project.basedir}/../release</release.dir>
-    </properties>
-
     <modelVersion>4.0.0</modelVersion>
     <artifactId>tor-binary-geoip</artifactId>
     <packaging>jar</packaging>

@@ -9,10 +9,6 @@
         <version>8.0.3</version>
     </parent>
 
-    <properties>
-        <release.dir>${project.basedir}/../release</release.dir>
-    </properties>
-
     <modelVersion>4.0.0</modelVersion>
     <artifactId>tor-binary-linux32</artifactId>
     <packaging>jar</packaging>
@@ -28,9 +24,6 @@
                         <phase>generate-resources</phase>
                         <configuration>
                             <target>
-                                <taskdef resource="org/apache/ant/compress/antlib.xml"
-                                         classpathref="maven.plugin.classpath"/>
-
                                 <get
                                     src="https://dist.torproject.org/torbrowser/${torbrowser.version}/tor-browser-linux32-${torbrowser.version}_en-US.tar.xz"
                                     dest="${project.build.directory}/tor-browser-linux32-${torbrowser.version}_en-US.tar.xz"

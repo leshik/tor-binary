@@ -16,7 +16,6 @@
         requirement are: gpg and 7z in path
         -->
         <torbrowser.version>8.0.3</torbrowser.version>
-        <release.dir>${project.basedir}/release</release.dir>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
@@ -62,12 +61,4 @@
         <module>tor-binary-windows</module>
         <module>tor-binary-geoip</module>
     </modules>
-
-    <distributionManagement>
-        <repository>
-            <id>local</id>
-            <url>file:///${release.dir}</url>
-        </repository>
-    </distributionManagement>
-
 </project>

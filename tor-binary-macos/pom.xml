@@ -9,10 +9,6 @@
         <version>8.0.3</version>
     </parent>
 
-    <properties>
-        <release.dir>${project.basedir}/../release</release.dir>
-    </properties>
-
     <modelVersion>4.0.0</modelVersion>
     <artifactId>tor-binary-macos</artifactId>
     <packaging>jar</packaging>
@@ -88,10 +84,7 @@
                     <artifactId>maven-antrun-plugin</artifactId>
                     <version>1.8</version>
                 </plugin>
-
             </plugins>
         </pluginManagement>
-
-
     </build>
 </project>
