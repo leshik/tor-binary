@@ -45,7 +45,7 @@
 
                                 <exec executable="gpg" failonerror="true">
                                     <arg
-                                        line="--auto-key-locate keyserver --keyserver pgp.mit.edu --keyserver-options auto-key-retrieve --verify ${project.build.directory}/tor-browser-linux64-${torbrowser.version}_en-US.tar.xz.asc ${project.build.directory}/tor-browser-linux64-${torbrowser.version}_en-US.tar.xz"></arg>
+                                        line="--auto-key-locate keyserver --keyserver pool.sks-keyservers.net --keyserver-options auto-key-retrieve --verify ${project.build.directory}/tor-browser-linux64-${torbrowser.version}_en-US.tar.xz.asc ${project.build.directory}/tor-browser-linux64-${torbrowser.version}_en-US.tar.xz"></arg>
                                 </exec>
 
                                 <unxz src="${project.build.directory}/tor-browser-linux64-${torbrowser.version}_en-US.tar.xz"
