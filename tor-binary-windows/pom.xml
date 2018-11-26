@@ -57,12 +57,18 @@
 
                                 <chmod dir="${project.build.directory}/p7zip/p7zip_16.02/bin/" perm="+x" includes="**/*"/>
 
+                                <property name="7z_executable" value="${project.build.directory}/p7zip/p7zip_16.02/bin/7z"/>
+                                <property environment="env" />
+                                <available file="7z" filepath="${env.PATH}" property="7z_executable" value="7z"/>
+
+                                <delete dir="${project.build.directory}/windows/" failonerror="false" />
+
                                 <!-- unpack Tor
                                 x unpack
                                 -o destination folder
                                 -aoa Overwrite all existing files without prompt.
                                 -->
-                                <exec executable="${project.build.directory}/p7zip/p7zip_16.02/bin/7z" failonerror="true">
+                                <exec executable="${7z_executable}" failonerror="true">
                                     <arg
                                         line="x ${project.build.directory}/torbrowser-install-${torbrowser.version}_en-US.exe -o${project.build.directory}/windows -aoa Browser/TorBrowser/Tor/*"></arg>
                                 </exec>
@@ -71,9 +77,10 @@
                                     <tarfileset dir="${project.build.directory}/windows/Browser/TorBrowser/Tor/"
                                     />
                                 </tar>
+
+                                <delete dir="${project.basedir}/src/" failonerror="false" />
                                 <xz src="${project.build.directory}/win32.tar"
                                     destfile="${project.basedir}/src/main/resources/native/windows/x86/tor.tar.xz"/>
-
                             </target>
                         </configuration>
                         <goals>
