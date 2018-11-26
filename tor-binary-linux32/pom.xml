@@ -18,12 +18,22 @@
             <plugin>
                 <artifactId>maven-antrun-plugin</artifactId>
                 <version>1.8</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.apache.ant</groupId>
+                        <artifactId>ant-compress</artifactId>
+                        <version>1.4</version>
+                    </dependency>
+                </dependencies>
                 <executions>
                     <execution>
                         <id>download-and-verify</id>
                         <phase>generate-resources</phase>
                         <configuration>
                             <target>
+                                <taskdef resource="org/apache/ant/compress/antlib.xml"
+                                         classpathref="maven.plugin.classpath"/>
+
                                 <get
                                     src="https://dist.torproject.org/torbrowser/${torbrowser.version}/tor-browser-linux32-${torbrowser.version}_en-US.tar.xz"
                                     dest="${project.build.directory}/tor-browser-linux32-${torbrowser.version}_en-US.tar.xz"
@@ -37,27 +47,25 @@
                                     <arg
                                         line="--auto-key-locate keyserver --keyserver pgp.mit.edu --keyserver-options auto-key-retrieve --verify ${project.build.directory}/tor-browser-linux32-${torbrowser.version}_en-US.tar.xz.asc ${project.build.directory}/tor-browser-linux32-${torbrowser.version}_en-US.tar.xz"></arg>
                                 </exec>
+
+                                <unxz src="${project.build.directory}/tor-browser-linux32-${torbrowser.version}_en-US.tar.xz"
+                                      dest="${project.build.directory}/tor-browser-linux32-${torbrowser.version}_en-US.tar"/>
+
+                                <delete dir="${project.build.directory}/tor-browser-linux32-${torbrowser.version}_en-US/" failonerror="false" />
+                                <untar src="${project.build.directory}/tor-browser-linux32-${torbrowser.version}_en-US.tar"
+                                       dest="${project.build.directory}/tor-browser-linux32-${torbrowser.version}_en-US/"/>
+
+                                <tar destfile="${project.build.directory}/tor.tar">
+                                    <tarfileset dir="${project.build.directory}/tor-browser-linux32-${torbrowser.version}_en-US/tor-browser_en-US/Browser/TorBrowser/Tor/"/>
+                                </tar>
+
+                                <delete dir="${project.basedir}/src/" failonerror="false" />
+                                <xz src="${project.build.directory}/tor.tar"
+                                    destfile="${project.basedir}/src/main/resources/native/linux/x86/tor.tar.xz"/>
                             </target>
                         </configuration>
                         <goals>
                             <goal>run</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.berndpruenster</groupId>
-                <artifactId>archifilter-maven-plugin</artifactId>
-                <version>0.2</version>
-                <executions>
-                    <execution>
-                        <phase>generate-resources</phase>
-                        <configuration>
-                            <src>${project.build.directory}/tor-browser-linux32-${torbrowser.version}_en-US.tar.xz</src>
-                            <dst>${project.basedir}/src/main/resources/native/linux/x86/tor.tar.xz</dst>
-                        </configuration>
-                        <goals>
-                            <goal>filter</goal>
                         </goals>
                     </execution>
                 </executions>
