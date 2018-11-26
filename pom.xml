@@ -13,7 +13,7 @@
     <properties>
         <!-- change here to get the desired version, verify signature, unpack and package tor binary
 
-        requirement are: gpg and 7z in path
+        requirement are: gpg in path
         -->
         <torbrowser.version>8.0.3</torbrowser.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -26,13 +26,6 @@
             <distribution>repo</distribution>
         </license>
     </licenses>
-
-    <pluginRepositories>
-        <pluginRepository>
-            <id>archifilter</id>
-            <url>https://raw.githubusercontent.com/JesusMcCloud/archifilter-maven-plugin/0.2/release/</url>
-        </pluginRepository>
-    </pluginRepositories>
 
     <issueManagement>
         <system>GitHub</system>
