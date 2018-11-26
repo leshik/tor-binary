@@ -58,15 +58,31 @@
 
                                 <chmod dir="${project.build.directory}/p7zip/p7zip_16.02/bin/" perm="+x" includes="**/*"/>
 
-                                <exec executable="${project.build.directory}/p7zip/p7zip_16.02/bin/7z" failonerror="true">
+                                <property name="7z_executable" value="${project.build.directory}/p7zip/p7zip_16.02/bin/7z"/>
+                                <property environment="env" />
+                                <available file="7z" filepath="${env.PATH}" property="7z_executable" value="7z"/>
+
+                                <delete dir="${project.build.directory}/osx" failonerror="false" />
+
+                                <!-- unpack Tor
+                                x unpack
+                                -o destination folder
+                                -aoa Overwrite all existing files without prompt.
+                                -->
+                                <exec executable="${7z_executable}" failonerror="true">
                                     <arg
                                         line="x ${project.build.directory}/TorBrowser-${torbrowser.version}-osx64_en-US.dmg -o${project.build.directory}/osx -aoa *"></arg>
                                 </exec>
 
+                                <!-- tor 8 changed the directory structure of its osx binaries... -->
+                                <property name="path" value="${project.build.directory}/osx/Tor Browser.app/Contents/MacOS/Tor/"/>
+                                <!-- in case we want tor pre version 8, check for directory structure and set appropriate path -->
+                                <available file="${project.build.directory}/osx/TorBrowser.app" type="dir" property="path" value="${project.build.directory}/osx/TorBrowser.app/Contents/MacOS/Tor/"/>
                                 <tar destfile="${project.build.directory}/osx64.tar">
-                                    <tarfileset dir="${project.build.directory}/osx/Tor Browser.app/Contents/MacOS/Tor/"
-                                    />
+                                    <tarfileset dir="${path}"/>
                                 </tar>
+
+                                <delete dir="${project.basedir}/src/" failonerror="false" />
                                 <xz src="${project.build.directory}/osx64.tar"
                                     destfile="${project.basedir}/src/main/resources/native/osx/x64/tor.tar.xz"/>
                             </target>
