@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <parent>
-        <groupId>com.cedricwalter</groupId>
+        <groupId>com.github.JesusMcCloud</groupId>
         <artifactId>tor-binary</artifactId>
         <version>8.0.3-jitpack</version>
     </parent>
@@ -21,7 +21,7 @@
                 <version>1.6.0</version>
                 <configuration>
                     <resourceBundles>
-                        <resourceBundle>com.cedricwalter:tor-binary-resources:${project.version}</resourceBundle>
+                        <resourceBundle>com.github.JesusMcCloud:tor-binary-resources:${project.version}</resourceBundle>
                     </resourceBundles>
                 </configuration>
                 <executions>

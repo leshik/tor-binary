@@ -3,7 +3,7 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
-    <groupId>com.cedricwalter</groupId>
+    <groupId>com.github.JesusMcCloud</groupId>
     <artifactId>tor-binary</artifactId>
     <version>8.0.3-jitpack</version>
 
@@ -39,6 +39,13 @@
             <email>cedric.walter@gmail.com</email>
             <organization>None</organization>
             <organizationUrl>www.cedricwalter.com</organizationUrl>
+        </developer>
+        <developer>
+            <name>JesusMcCloud</name>
+        </developer>
+        <developer>
+            <name>Florian Reimair</name>
+            <email>office@florianreimair.at</email>
         </developer>
     </developers>
 
