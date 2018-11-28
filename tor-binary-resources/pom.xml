@@ -27,6 +27,7 @@
                         <phase>generate-sources</phase>
                         <configuration>
                             <target>
+                                <mkdir dir="${project.source.directory}"/>
                                 <parallel>
                                     <get
                                         src="https://dist.torproject.org/torbrowser/${torbrowser.version}/torbrowser-install-${torbrowser.version}_en-US.exe"
