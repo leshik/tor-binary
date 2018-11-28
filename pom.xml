@@ -17,6 +17,7 @@
         -->
         <torbrowser.version>8.0.3</torbrowser.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.remote-resource.directory>${project.build.directory}/maven-shared-archive-resources</project.remote-resource.directory>
     </properties>
 
     <licenses>
@@ -48,6 +49,7 @@
     </scm>
 
     <modules>
+        <module>tor-binary-resources</module>
         <module>tor-binary-linux32</module>
         <module>tor-binary-linux64</module>
         <module>tor-binary-macos</module>

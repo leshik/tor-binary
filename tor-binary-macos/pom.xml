@@ -16,6 +16,23 @@
     <build>
         <plugins>
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-remote-resources-plugin</artifactId>
+                <version>1.6.0</version>
+                <configuration>
+                    <resourceBundles>
+                        <resourceBundle>com.cedricwalter:tor-binary-resources:${project.version}</resourceBundle>
+                    </resourceBundles>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>process</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
                 <artifactId>maven-antrun-plugin</artifactId>
                 <version>1.8</version>
                 <dependencies>
@@ -34,31 +51,9 @@
                                 <taskdef resource="org/apache/ant/compress/antlib.xml"
                                          classpathref="maven.plugin.classpath"/>
 
-                                <get
-                                    src="https://dist.torproject.org/torbrowser/${torbrowser.version}/TorBrowser-${torbrowser.version}-osx64_en-US.dmg"
-                                    dest="${project.build.directory}/TorBrowser-${torbrowser.version}-osx64_en-US.dmg"
-                                    skipexisting="true"/>
-                                <get
-                                    src="https://dist.torproject.org/torbrowser/${torbrowser.version}/TorBrowser-${torbrowser.version}-osx64_en-US.dmg.asc"
-                                    dest="${project.build.directory}/TorBrowser-${torbrowser.version}-osx64_en-US.dmg.asc"
-                                    skipexisting="true"/>
+                                <property name="7z_executable" value="${project.remote-resource.directory}/p7zip/7z" />
+                                <chmod dir="${7z_executable}/.." perm="+x" includes="**/*"/>
 
-                                <exec executable="gpg" failonerror="true">
-                                    <arg
-                                        line="--auto-key-locate keyserver --keyserver pool.sks-keyservers.net --keyserver-options auto-key-retrieve --verify ${project.build.directory}/TorBrowser-${torbrowser.version}-osx64_en-US.dmg.asc ${project.build.directory}/TorBrowser-${torbrowser.version}-osx64_en-US.dmg"></arg>
-                                </exec>
-
-                                <get
-                                  src="https://sourceforge.net/projects/p7zip/files/p7zip/16.02/p7zip_16.02_x86_linux_bin.tar.bz2/download"
-                                  dest="${project.build.directory}/p7zip.tar.bz2"
-                                  skipexisting="true"/>
-                                <bunzip2 src="${project.build.directory}/p7zip.tar.bz2" />
-                                <untar src="${project.build.directory}/p7zip.tar"
-                                       dest="${project.build.directory}/p7zip/" />
-
-                                <chmod dir="${project.build.directory}/p7zip/p7zip_16.02/bin/" perm="+x" includes="**/*"/>
-
-                                <property name="7z_executable" value="${project.build.directory}/p7zip/p7zip_16.02/bin/7z"/>
                                 <property environment="env" />
                                 <available file="7z" filepath="${env.PATH}" property="7z_executable" value="7z"/>
 
@@ -71,7 +66,7 @@
                                 -->
                                 <exec executable="${7z_executable}" failonerror="true">
                                     <arg
-                                        line="x ${project.build.directory}/TorBrowser-${torbrowser.version}-osx64_en-US.dmg -o${project.build.directory}/osx -aoa *"></arg>
+                                        line="x ${project.remote-resource.directory}/TorBrowser-${torbrowser.version}-osx64_en-US.dmg -o${project.build.directory}/osx -aoa *"></arg>
                                 </exec>
 
                                 <!-- tor 8 changed the directory structure of its osx binaries... -->
@@ -83,6 +78,7 @@
                                 </tar>
 
                                 <delete dir="${project.basedir}/src/" failonerror="false" />
+                                <delete dir="${project.remote-resource.directory}" />
                                 <xz src="${project.build.directory}/osx64.tar"
                                     destfile="${project.basedir}/src/main/resources/native/osx/x64/tor.tar.xz"/>
                             </target>

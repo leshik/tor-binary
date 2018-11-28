@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <parent>
+        <groupId>com.cedricwalter</groupId>
+        <artifactId>tor-binary</artifactId>
+        <version>8.0.3-jitpack</version>
+    </parent>
+
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>tor-binary-resources</artifactId>
+
+    <properties>
+        <project.source.directory>${project.basedir}/src/main/resources</project.source.directory>
+    </properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>1.8</version>
+                <executions>
+                    <execution>
+                        <id>parallel fetch of binaries</id>
+                        <phase>generate-sources</phase>
+                        <configuration>
+                            <target>
+                                <parallel>
+                                    <get
+                                        src="https://dist.torproject.org/torbrowser/${torbrowser.version}/torbrowser-install-${torbrowser.version}_en-US.exe"
+                                        dest="${project.source.directory}/torbrowser-install-${torbrowser.version}_en-US.exe"
+                                        skipexisting="true"/>
+                                    <get
+                                        src="https://dist.torproject.org/torbrowser/${torbrowser.version}/torbrowser-install-${torbrowser.version}_en-US.exe.asc"
+                                        dest="${project.source.directory}/torbrowser-install-${torbrowser.version}_en-US.exe.asc"
+                                        skipexisting="true"/>
+                                    <get
+                                        src="https://dist.torproject.org/torbrowser/${torbrowser.version}/TorBrowser-${torbrowser.version}-osx64_en-US.dmg"
+                                        dest="${project.source.directory}/TorBrowser-${torbrowser.version}-osx64_en-US.dmg"
+                                        skipexisting="true"/>
+                                    <get
+                                        src="https://dist.torproject.org/torbrowser/${torbrowser.version}/TorBrowser-${torbrowser.version}-osx64_en-US.dmg.asc"
+                                        dest="${project.source.directory}/TorBrowser-${torbrowser.version}-osx64_en-US.dmg.asc"
+                                        skipexisting="true"/>
+                                    <get
+                                        src="https://dist.torproject.org/torbrowser/${torbrowser.version}/tor-browser-linux32-${torbrowser.version}_en-US.tar.xz"
+                                        dest="${project.source.directory}/tor-browser-linux32-${torbrowser.version}_en-US.tar.xz"
+                                        skipexisting="true"/>
+                                    <get
+                                        src="https://dist.torproject.org/torbrowser/${torbrowser.version}/tor-browser-linux32-${torbrowser.version}_en-US.tar.xz.asc"
+                                        dest="${project.source.directory}/tor-browser-linux32-${torbrowser.version}_en-US.tar.xz.asc"
+                                        skipexisting="true"/>
+                                    <get
+                                        src="https://dist.torproject.org/torbrowser/${torbrowser.version}/tor-browser-linux64-${torbrowser.version}_en-US.tar.xz"
+                                        dest="${project.source.directory}/tor-browser-linux64-${torbrowser.version}_en-US.tar.xz"
+                                        skipexisting="true"/>
+                                    <get
+                                        src="https://dist.torproject.org/torbrowser/${torbrowser.version}/tor-browser-linux64-${torbrowser.version}_en-US.tar.xz.asc"
+                                        dest="${project.source.directory}/tor-browser-linux64-${torbrowser.version}_en-US.tar.xz.asc"
+                                        skipexisting="true"/>
+                                    <get
+                                        src="https://sourceforge.net/projects/p7zip/files/p7zip/16.02/p7zip_16.02_x86_linux_bin.tar.bz2/download"
+                                        dest="${project.source.directory}/p7zip.tar.bz2"
+                                        skipexisting="true"/>
+                                </parallel>
+                                <echo message="checking windows binary signature"/>
+                                <exec executable="gpg" failonerror="true">
+                                    <arg
+                                        line="--auto-key-locate keyserver --keyserver pool.sks-keyservers.net --keyserver-options auto-key-retrieve --verify ${project.source.directory}/torbrowser-install-${torbrowser.version}_en-US.exe.asc ${project.source.directory}/torbrowser-install-${torbrowser.version}_en-US.exe"></arg>
+                                </exec>
+                                <echo message="checking macos binary signature"/>
+                                <exec executable="gpg" failonerror="true">
+                                    <arg
+                                        line="--auto-key-locate keyserver --keyserver pool.sks-keyservers.net --keyserver-options auto-key-retrieve --verify ${project.source.directory}/TorBrowser-${torbrowser.version}-osx64_en-US.dmg.asc ${project.source.directory}/TorBrowser-${torbrowser.version}-osx64_en-US.dmg"></arg>
+                                </exec>
+                                <echo message="checking linux32 binary signature"/>
+                                <exec executable="gpg" failonerror="true">
+                                    <arg
+                                        line="--auto-key-locate keyserver --keyserver pool.sks-keyservers.net --keyserver-options auto-key-retrieve --verify ${project.source.directory}/tor-browser-linux32-${torbrowser.version}_en-US.tar.xz.asc ${project.source.directory}/tor-browser-linux32-${torbrowser.version}_en-US.tar.xz"></arg>
+                                </exec>
+                                <echo message="checking linux64 binary signature"/>
+                                <exec executable="gpg" failonerror="true">
+                                    <arg
+                                        line="--auto-key-locate keyserver --keyserver pool.sks-keyservers.net --keyserver-options auto-key-retrieve --verify ${project.source.directory}/tor-browser-linux64-${torbrowser.version}_en-US.tar.xz.asc ${project.source.directory}/tor-browser-linux64-${torbrowser.version}_en-US.tar.xz"></arg>
+                                </exec>
+                                <bunzip2 src="${project.source.directory}/p7zip.tar.bz2"
+                                    dest="${project.source.directory}/p7zip.tar" />
+                                <untar src="${project.source.directory}/p7zip.tar"
+                                       dest="${project.source.directory}/tmp/" />
+                                <move file="${project.source.directory}/tmp/p7zip_16.02/bin" tofile="${project.source.directory}/p7zip"/>
+                                <delete dir="${project.source.directory}/tmp"/>
+                                <delete file="${project.source.directory}/p7zip.tar"/>
+                            </target>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+      <plugin>
+        <artifactId>maven-remote-resources-plugin</artifactId>
+        <version>1.6.0</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>bundle</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <includes><include>**/*</include></includes>
+        </configuration>
+      </plugin>
+        </plugins>
+    </build>
+</project>

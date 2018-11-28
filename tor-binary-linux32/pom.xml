@@ -16,6 +16,23 @@
     <build>
         <plugins>
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-remote-resources-plugin</artifactId>
+                <version>1.6.0</version>
+                <configuration>
+                    <resourceBundles>
+                        <resourceBundle>com.cedricwalter:tor-binary-resources:${project.version}</resourceBundle>
+                    </resourceBundles>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>process</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
                 <artifactId>maven-antrun-plugin</artifactId>
                 <version>1.8</version>
                 <dependencies>
@@ -34,21 +51,7 @@
                                 <taskdef resource="org/apache/ant/compress/antlib.xml"
                                          classpathref="maven.plugin.classpath"/>
 
-                                <get
-                                    src="https://dist.torproject.org/torbrowser/${torbrowser.version}/tor-browser-linux32-${torbrowser.version}_en-US.tar.xz"
-                                    dest="${project.build.directory}/tor-browser-linux32-${torbrowser.version}_en-US.tar.xz"
-                                    skipexisting="true"/>
-                                <get
-                                    src="https://dist.torproject.org/torbrowser/${torbrowser.version}/tor-browser-linux32-${torbrowser.version}_en-US.tar.xz.asc"
-                                    dest="${project.build.directory}/tor-browser-linux32-${torbrowser.version}_en-US.tar.xz.asc"
-                                    skipexisting="true"/>
-
-                                <exec executable="gpg" failonerror="true">
-                                    <arg
-                                        line="--auto-key-locate keyserver --keyserver pool.sks-keyservers.net --keyserver-options auto-key-retrieve --verify ${project.build.directory}/tor-browser-linux32-${torbrowser.version}_en-US.tar.xz.asc ${project.build.directory}/tor-browser-linux32-${torbrowser.version}_en-US.tar.xz"></arg>
-                                </exec>
-
-                                <unxz src="${project.build.directory}/tor-browser-linux32-${torbrowser.version}_en-US.tar.xz"
+                                <unxz src="${project.remote-resource.directory}/tor-browser-linux32-${torbrowser.version}_en-US.tar.xz"
                                       dest="${project.build.directory}/tor-browser-linux32-${torbrowser.version}_en-US.tar"/>
 
                                 <delete dir="${project.build.directory}/tor-browser-linux32-${torbrowser.version}_en-US/" failonerror="false" />
@@ -60,6 +63,7 @@
                                 </tar>
 
                                 <delete dir="${project.basedir}/src/" failonerror="false" />
+                                <delete dir="${project.remote-resource.directory}" />
                                 <xz src="${project.build.directory}/tor.tar"
                                     destfile="${project.basedir}/src/main/resources/native/linux/x86/tor.tar.xz"/>
                             </target>
