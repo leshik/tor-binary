@@ -4,14 +4,10 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <parent>
-        <groupId>com.cedricwalter</groupId>
+        <groupId>com.github.JesusMcCloud</groupId>
         <artifactId>tor-binary</artifactId>
-        <version>8.0.3</version>
+        <version>8.0.3-jitpack</version>
     </parent>
-
-    <properties>
-        <release.dir>${project.basedir}/../release</release.dir>
-    </properties>
 
     <modelVersion>4.0.0</modelVersion>
     <artifactId>tor-binary-geoip</artifactId>
@@ -19,6 +15,23 @@
 
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-remote-resources-plugin</artifactId>
+                <version>1.6.0</version>
+                <configuration>
+                    <resourceBundles>
+                        <resourceBundle>com.github.JesusMcCloud:tor-binary-resources:${project.version}</resourceBundle>
+                    </resourceBundles>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>process</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <artifactId>maven-antrun-plugin</artifactId>
                 <version>1.8</version>
@@ -38,22 +51,8 @@
                                 <taskdef resource="org/apache/ant/compress/antlib.xml"
                                          classpathref="maven.plugin.classpath"/>
 
-                                <get
-                                    src="https://dist.torproject.org/torbrowser/${torbrowser.version}/tor-browser-linux64-${torbrowser.version}_en-US.tar.xz"
-                                    dest="${project.build.directory}/tor-browser-linux64-${torbrowser.version}_en-US.tar.xz"
-                                    skipexisting="true"/>
-                                <get
-                                    src="https://dist.torproject.org/torbrowser/${torbrowser.version}/tor-browser-linux64-${torbrowser.version}_en-US.tar.xz.asc"
-                                    dest="${project.build.directory}/tor-browser-linux64-${torbrowser.version}_en-US.tar.xz.asc"
-                                    skipexisting="true"/>
-
-                                <exec executable="gpg" failonerror="true">
-                                    <arg
-                                        line="--auto-key-locate keyserver --keyserver pgp.mit.edu --keyserver-options auto-key-retrieve --verify ${project.build.directory}/tor-browser-linux64-${torbrowser.version}_en-US.tar.xz.asc ${project.build.directory}/tor-browser-linux64-${torbrowser.version}_en-US.tar.xz"></arg>
-                                </exec>
-
                                 <unxz
-                                    src="${project.build.directory}/tor-browser-linux64-${torbrowser.version}_en-US.tar.xz"
+                                    src="${project.remote-resource.directory}/tor-browser-linux64-${torbrowser.version}_en-US.tar.xz"
                                     dest="${project.build.directory}/linuxx64.tar"
 
                                 />
@@ -65,6 +64,7 @@
                                     </patternset>
                                     <mapper type="flatten"/>
                                 </untar>
+                                <delete dir="${project.remote-resource.directory}" />
                             </target>
                         </configuration>
                         <goals>

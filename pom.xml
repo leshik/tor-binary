@@ -3,9 +3,9 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
-    <groupId>com.cedricwalter</groupId>
+    <groupId>com.github.JesusMcCloud</groupId>
     <artifactId>tor-binary</artifactId>
-    <version>8.0.3</version>
+    <version>8.0.3-jitpack</version>
 
     <modelVersion>4.0.0</modelVersion>
     <packaging>pom</packaging>
@@ -13,11 +13,11 @@
     <properties>
         <!-- change here to get the desired version, verify signature, unpack and package tor binary
 
-        requirement are: gpg and 7z in path
+        requirement are: gpg in path
         -->
         <torbrowser.version>8.0.3</torbrowser.version>
-        <release.dir>${project.basedir}/release</release.dir>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.remote-resource.directory>${project.build.directory}/maven-shared-archive-resources</project.remote-resource.directory>
     </properties>
 
     <licenses>
@@ -27,13 +27,6 @@
             <distribution>repo</distribution>
         </license>
     </licenses>
-
-    <pluginRepositories>
-        <pluginRepository>
-            <id>archifilter</id>
-            <url>https://raw.githubusercontent.com/JesusMcCloud/archifilter-maven-plugin/0.2/release/</url>
-        </pluginRepository>
-    </pluginRepositories>
 
     <issueManagement>
         <system>GitHub</system>
@@ -47,6 +40,13 @@
             <organization>None</organization>
             <organizationUrl>www.cedricwalter.com</organizationUrl>
         </developer>
+        <developer>
+            <name>JesusMcCloud</name>
+        </developer>
+        <developer>
+            <name>Florian Reimair</name>
+            <email>office@florianreimair.at</email>
+        </developer>
     </developers>
 
     <scm>
@@ -56,18 +56,11 @@
     </scm>
 
     <modules>
+        <module>tor-binary-resources</module>
         <module>tor-binary-linux32</module>
         <module>tor-binary-linux64</module>
         <module>tor-binary-macos</module>
         <module>tor-binary-windows</module>
         <module>tor-binary-geoip</module>
     </modules>
-
-    <distributionManagement>
-        <repository>
-            <id>local</id>
-            <url>file:///${release.dir}</url>
-        </repository>
-    </distributionManagement>
-
 </project>

@@ -4,14 +4,10 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <parent>
-        <groupId>com.cedricwalter</groupId>
+        <groupId>com.github.JesusMcCloud</groupId>
         <artifactId>tor-binary</artifactId>
-        <version>8.0.3</version>
+        <version>8.0.3-jitpack</version>
     </parent>
-
-    <properties>
-        <release.dir>${project.basedir}/../release</release.dir>
-    </properties>
 
     <modelVersion>4.0.0</modelVersion>
     <artifactId>tor-binary-windows</artifactId>
@@ -19,6 +15,23 @@
 
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-remote-resources-plugin</artifactId>
+                <version>1.6.0</version>
+                <configuration>
+                    <resourceBundles>
+                        <resourceBundle>com.github.JesusMcCloud:tor-binary-resources:${project.version}</resourceBundle>
+                    </resourceBundles>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>process</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <artifactId>maven-antrun-plugin</artifactId>
                 <version>1.8</version>
@@ -37,37 +50,34 @@
                             <target>
                                 <taskdef resource="org/apache/ant/compress/antlib.xml"
                                          classpathref="maven.plugin.classpath"/>
-                                <get
-                                    src="https://dist.torproject.org/torbrowser/${torbrowser.version}/torbrowser-install-${torbrowser.version}_en-US.exe"
-                                    dest="${project.build.directory}/torbrowser-install-${torbrowser.version}_en-US.exe"
-                                    skipexisting="true"/>
-                                <get
-                                    src="https://dist.torproject.org/torbrowser/${torbrowser.version}/torbrowser-install-${torbrowser.version}_en-US.exe.asc"
-                                    dest="${project.build.directory}/torbrowser-install-${torbrowser.version}_en-US.exe.asc"
-                                    skipexisting="true"/>
 
-                                <exec executable="gpg" failonerror="true">
-                                    <arg
-                                        line="--auto-key-locate keyserver --keyserver pgp.mit.edu --keyserver-options auto-key-retrieve --verify ${project.build.directory}/torbrowser-install-${torbrowser.version}_en-US.exe.asc ${project.build.directory}/torbrowser-install-${torbrowser.version}_en-US.exe"></arg>
-                                </exec>
+                                <property name="7z_executable" value="${project.remote-resource.directory}/p7zip/7z" />
+                                <chmod dir="${7z_executable}/.." perm="+x" includes="**/*"/>
+
+                                <property environment="env" />
+                                <available file="7z" filepath="${env.PATH}" property="7z_executable" value="7z"/>
+
+                                <delete dir="${project.build.directory}/windows/" failonerror="false" />
 
                                 <!-- unpack Tor
                                 x unpack
                                 -o destination folder
                                 -aoa Overwrite all existing files without prompt.
                                 -->
-                                <exec executable="7z" failonerror="true">
+                                <exec executable="${7z_executable}" failonerror="true">
                                     <arg
-                                        line="x ${project.build.directory}/torbrowser-install-${torbrowser.version}_en-US.exe -o${project.build.directory}/windows -aoa Browser/TorBrowser/Tor/*"></arg>
+                                        line="x ${project.remote-resource.directory}/torbrowser-install-${torbrowser.version}_en-US.exe -o${project.build.directory}/windows -aoa Browser/TorBrowser/Tor/*"></arg>
                                 </exec>
 
                                 <tar destfile="${project.build.directory}/win32.tar">
                                     <tarfileset dir="${project.build.directory}/windows/Browser/TorBrowser/Tor/"
                                     />
                                 </tar>
+
+                                <delete dir="${project.basedir}/src/" failonerror="false" />
+                                <delete dir="${project.remote-resource.directory}" />
                                 <xz src="${project.build.directory}/win32.tar"
                                     destfile="${project.basedir}/src/main/resources/native/windows/x86/tor.tar.xz"/>
-
                             </target>
                         </configuration>
                         <goals>

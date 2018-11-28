@@ -4,14 +4,10 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <parent>
-        <groupId>com.cedricwalter</groupId>
+        <groupId>com.github.JesusMcCloud</groupId>
         <artifactId>tor-binary</artifactId>
-        <version>8.0.3</version>
+        <version>8.0.3-jitpack</version>
     </parent>
-
-    <properties>
-        <release.dir>${project.basedir}/../release</release.dir>
-    </properties>
 
     <modelVersion>4.0.0</modelVersion>
     <artifactId>tor-binary-macos</artifactId>
@@ -19,6 +15,23 @@
 
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-remote-resources-plugin</artifactId>
+                <version>1.6.0</version>
+                <configuration>
+                    <resourceBundles>
+                        <resourceBundle>com.github.JesusMcCloud:tor-binary-resources:${project.version}</resourceBundle>
+                    </resourceBundles>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>process</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <artifactId>maven-antrun-plugin</artifactId>
                 <version>1.8</version>
@@ -38,39 +51,34 @@
                                 <taskdef resource="org/apache/ant/compress/antlib.xml"
                                          classpathref="maven.plugin.classpath"/>
 
-                                <get
-                                    src="https://dist.torproject.org/torbrowser/${torbrowser.version}/TorBrowser-${torbrowser.version}-osx64_en-US.dmg"
-                                    dest="${project.build.directory}/TorBrowser-${torbrowser.version}-osx64_en-US.dmg"
-                                    skipexisting="true"/>
-                                <get
-                                    src="https://dist.torproject.org/torbrowser/${torbrowser.version}/TorBrowser-${torbrowser.version}-osx64_en-US.dmg.asc"
-                                    dest="${project.build.directory}/TorBrowser-${torbrowser.version}-osx64_en-US.dmg.asc"
-                                    skipexisting="true"/>
+                                <property name="7z_executable" value="${project.remote-resource.directory}/p7zip/7z" />
+                                <chmod dir="${7z_executable}/.." perm="+x" includes="**/*"/>
 
-                                <exec executable="gpg" failonerror="true">
+                                <property environment="env" />
+                                <available file="7z" filepath="${env.PATH}" property="7z_executable" value="7z"/>
+
+                                <delete dir="${project.build.directory}/osx" failonerror="false" />
+
+                                <!-- unpack Tor
+                                x unpack
+                                -o destination folder
+                                -aoa Overwrite all existing files without prompt.
+                                -->
+                                <exec executable="${7z_executable}" failonerror="true">
                                     <arg
-                                        line="--auto-key-locate keyserver --keyserver pgp.mit.edu --keyserver-options auto-key-retrieve --verify ${project.build.directory}/TorBrowser-${torbrowser.version}-osx64_en-US.dmg.asc ${project.build.directory}/TorBrowser-${torbrowser.version}-osx64_en-US.dmg"></arg>
+                                        line="x ${project.remote-resource.directory}/TorBrowser-${torbrowser.version}-osx64_en-US.dmg -o${project.build.directory}/osx -aoa *"></arg>
                                 </exec>
 
-                                <get
-                                  src="https://sourceforge.net/projects/p7zip/files/p7zip/16.02/p7zip_16.02_x86_linux_bin.tar.bz2/download"
-                                  dest="${project.build.directory}/p7zip.tar.bz2"
-                                  skipexisting="true"/>
-                                <bunzip2 src="${project.build.directory}/p7zip.tar.bz2" />
-                                <untar src="${project.build.directory}/p7zip.tar"
-                                       dest="${project.build.directory}/p7zip/" />
-
-                                <chmod dir="${project.build.directory}/p7zip/p7zip_16.02/bin/" perm="+x" includes="**/*"/>
-
-                                <exec executable="${project.build.directory}/p7zip/p7zip_16.02/bin/7z" failonerror="true">
-                                    <arg
-                                        line="x ${project.build.directory}/TorBrowser-${torbrowser.version}-osx64_en-US.dmg -o${project.build.directory}/osx -aoa *"></arg>
-                                </exec>
-
+                                <!-- tor 8 changed the directory structure of its osx binaries... -->
+                                <property name="path" value="${project.build.directory}/osx/Tor Browser.app/Contents/MacOS/Tor/"/>
+                                <!-- in case we want tor pre version 8, check for directory structure and set appropriate path -->
+                                <available file="${project.build.directory}/osx/TorBrowser.app" type="dir" property="path" value="${project.build.directory}/osx/TorBrowser.app/Contents/MacOS/Tor/"/>
                                 <tar destfile="${project.build.directory}/osx64.tar">
-                                    <tarfileset dir="${project.build.directory}/osx/Tor Browser.app/Contents/MacOS/Tor/"
-                                    />
+                                    <tarfileset dir="${path}"/>
                                 </tar>
+
+                                <delete dir="${project.basedir}/src/" failonerror="false" />
+                                <delete dir="${project.remote-resource.directory}" />
                                 <xz src="${project.build.directory}/osx64.tar"
                                     destfile="${project.basedir}/src/main/resources/native/osx/x64/tor.tar.xz"/>
                             </target>
@@ -88,10 +96,7 @@
                     <artifactId>maven-antrun-plugin</artifactId>
                     <version>1.8</version>
                 </plugin>
-
             </plugins>
         </pluginManagement>
-
-
     </build>
 </project>
