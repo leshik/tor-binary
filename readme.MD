@@ -40,7 +40,7 @@ Tor binary are simple zip files:
 
 ```
 <dependency>
-    <groupId>com.cedricwalter</groupId>
+    <groupId>com.github.JesusMcCloud.tor-binary</groupId>
     <artifactId>tor-binary-linux32</artifactId>
     <version>${torbrowser.version}</version>
     <type>tar.xz</type>
@@ -49,7 +49,7 @@ Tor binary are simple zip files:
 ```
 ```
 <dependency>
-    <groupId>com.cedricwalter</groupId>
+    <groupId>com.github.JesusMcCloud.tor-binary</groupId>
     <artifactId>tor-binary-linux64</artifactId>
     <version>${torbrowser.version}</version>
     <type>tar.xz</type>
@@ -58,7 +58,7 @@ Tor binary are simple zip files:
 ```
 ```
 <dependency>
-    <groupId>com.cedricwalter</groupId>
+    <groupId>com.github.JesusMcCloud.tor-binary</groupId>
     <artifactId>tor-binary-macos</artifactId>
     <version>${torbrowser.version}</version>
     <type>tar.xz</type>
@@ -67,7 +67,7 @@ Tor binary are simple zip files:
 ```
 ```
 <dependency>
-    <groupId>com.cedricwalter</groupId>
+    <groupId>com.github.JesusMcCloud.tor-binary</groupId>
     <artifactId>tor-binary-windows</artifactId>
     <version>${torbrowser.version}</version>
     <type>tar.xz</type>
