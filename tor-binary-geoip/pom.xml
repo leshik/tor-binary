@@ -65,6 +65,8 @@
                                     <mapper type="flatten"/>
                                 </untar>
                                 <delete dir="${project.remote-resource.directory}" />
+
+                                <chmod dir="${project.basedir}/src/main/resources" perm="+x" includes="*"/>
                             </target>
                         </configuration>
                         <goals>

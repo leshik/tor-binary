@@ -35,22 +35,12 @@
             <plugin>
                 <artifactId>maven-antrun-plugin</artifactId>
                 <version>1.8</version>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.apache.ant</groupId>
-                        <artifactId>ant-compress</artifactId>
-                        <version>1.4</version>
-                    </dependency>
-                </dependencies>
                 <executions>
                     <execution>
                         <id>unpack-osx</id>
                         <phase>generate-resources</phase>
                         <configuration>
                             <target>
-                                <taskdef resource="org/apache/ant/compress/antlib.xml"
-                                         classpathref="maven.plugin.classpath"/>
-
                                 <property name="7z_executable" value="${project.remote-resource.directory}/p7zip/7z" />
                                 <chmod dir="${7z_executable}/.." perm="+x" includes="**/*"/>
 
@@ -73,14 +63,13 @@
                                 <property name="path" value="${project.build.directory}/osx/Tor Browser.app/Contents/MacOS/Tor/"/>
                                 <!-- in case we want tor pre version 8, check for directory structure and set appropriate path -->
                                 <available file="${project.build.directory}/osx/TorBrowser.app" type="dir" property="path" value="${project.build.directory}/osx/TorBrowser.app/Contents/MacOS/Tor/"/>
-                                <tar destfile="${project.build.directory}/osx64.tar">
-                                    <tarfileset dir="${path}"/>
-                                </tar>
 
                                 <delete dir="${project.basedir}/src/" failonerror="false" />
                                 <delete dir="${project.remote-resource.directory}" />
-                                <xz src="${project.build.directory}/osx64.tar"
-                                    destfile="${project.basedir}/src/main/resources/native/osx/x64/tor.tar.xz"/>
+                                <mkdir dir="${project.basedir}/src/main/resources/native/osx/x64/"/>
+                                <exec executable="tar" dir="${path}" failonerror="true">
+                                    <arg line="-cJvf ${project.basedir}/src/main/resources/native/osx/x64/tor.tar.xz ."/>
+                                </exec>
                             </target>
                         </configuration>
                         <goals>
