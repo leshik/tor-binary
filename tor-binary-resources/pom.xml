@@ -6,7 +6,7 @@
     <parent>
         <groupId>com.github.JesusMcCloud</groupId>
         <artifactId>tor-binary</artifactId>
-        <version>8.0.8</version>
+        <version>8.0.9</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
@@ -46,6 +46,14 @@
                                         dest="${project.source.directory}/TorBrowser-${torbrowser.version}-osx64_en-US.dmg.asc"
                                         skipexisting="true"/>
                                     <get
+                                        src="https://sourceforge.net/projects/tor-browser-ports/files/${torbrowser.version}-armhf/tor-browser-linux-arm-${torbrowser.version}_en-US.tar.xz/download"
+                                        dest="${project.source.directory}/tor-browser-linux-arm-${torbrowser.version}_en-US.tar.xz"
+                                        skipexisting="true"/>
+                                    <get
+                                        src="https://sourceforge.net/projects/tor-browser-ports/files/${torbrowser.version}-armhf/sha256sums-unsigned-build.txt/download"
+                                        dest="${project.source.directory}/tor-browser-linux-arm-${torbrowser.version}_sha256sums-unsigned-build.txt"
+                                        skipexisting="true"/>
+                                    <get
                                         src="https://dist.torproject.org/torbrowser/${torbrowser.version}/tor-browser-linux32-${torbrowser.version}_en-US.tar.xz"
                                         dest="${project.source.directory}/tor-browser-linux32-${torbrowser.version}_en-US.tar.xz"
                                         skipexisting="true"/>
@@ -75,6 +83,11 @@
                                 <exec executable="gpg" failonerror="true">
                                     <arg
                                         line="--auto-key-locate keyserver --keyserver pool.sks-keyservers.net --keyserver-options auto-key-retrieve --verify ${project.source.directory}/TorBrowser-${torbrowser.version}-osx64_en-US.dmg.asc ${project.source.directory}/TorBrowser-${torbrowser.version}-osx64_en-US.dmg"></arg>
+                                </exec>
+                                <echo message="checking linux-arm binary sha256sum"/>
+                                <exec executable="sh" failonerror="true">
+                                    <arg
+                                        line="-c 'cd ${project.source.directory}; grep tor-browser-linux-arm-${torbrowser.version}_en-US.tar.xz tor-browser-linux-arm-${torbrowser.version}_sha256sums-unsigned-build.txt | shasum -a 256 -c'"></arg>
                                 </exec>
                                 <echo message="checking linux32 binary signature"/>
                                 <exec executable="gpg" failonerror="true">

@@ -10,7 +10,7 @@
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>tor-binary-geoip</artifactId>
+    <artifactId>tor-binary-linux-arm</artifactId>
     <packaging>jar</packaging>
 
     <build>
@@ -35,38 +35,25 @@
             <plugin>
                 <artifactId>maven-antrun-plugin</artifactId>
                 <version>1.8</version>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.apache.ant</groupId>
-                        <artifactId>ant-compress</artifactId>
-                        <version>1.4</version>
-                    </dependency>
-                </dependencies>
                 <executions>
                     <execution>
-                        <id>unpack-geoip</id>
+                        <id>download-and-verify</id>
                         <phase>generate-resources</phase>
                         <configuration>
                             <target>
-                                <taskdef resource="org/apache/ant/compress/antlib.xml"
-                                         classpathref="maven.plugin.classpath"/>
+                                <exec executable="tar" dir="${project.build.directory}" failonerror="true">
+                                    <arg value="-xJvf"/>
+                                    <arg value="${project.remote-resource.directory}/tor-browser-linux-arm-${torbrowser.version}_en-US.tar.xz"/>
+                                    <arg value="tor-browser_en-US/Browser/TorBrowser/Tor/"/>
+                                </exec>
 
-                                <unxz
-                                    src="${project.remote-resource.directory}/tor-browser-linux64-${torbrowser.version}_en-US.tar.xz"
-                                    dest="${project.build.directory}/linuxx64.tar"
-
-                                />
-                                <untar src="${project.build.directory}/linuxx64.tar"
-                                       dest="${project.basedir}/src/main/resources">
-                                    <patternset>
-                                        <include name="tor-browser_en-US/Browser/TorBrowser/Data/Tor/geoip"/>
-                                        <include name="tor-browser_en-US/Browser/TorBrowser/Data/Tor/geoip6"/>
-                                    </patternset>
-                                    <mapper type="flatten"/>
-                                </untar>
+                                <delete dir="${project.basedir}/src/" failonerror="false" />
                                 <delete dir="${project.remote-resource.directory}" />
 
-                                <chmod dir="${project.basedir}/src/main/resources" perm="+x" includes="*"/>
+                                <mkdir dir="${project.basedir}/src/main/resources/native/linux/arm/"/>
+                                <exec executable="tar" dir="${project.build.directory}/tor-browser_en-US/Browser/TorBrowser/Tor/" failonerror="true">
+                                    <arg line="-cJvf ${project.basedir}/src/main/resources/native/linux/arm/tor.tar.xz ."/>
+                                </exec>
                             </target>
                         </configuration>
                         <goals>
