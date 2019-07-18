@@ -62,6 +62,22 @@
                                         dest="${project.source.directory}/tor-browser-linux64-${torbrowser.version}_en-US.tar.xz.asc"
                                         skipexisting="true"/>
                                     <get
+                                        src="https://sourceforge.net/projects/tor-browser-ports/files/${torbrowser.version}-armhf/tor-browser-linux-armhf-${torbrowser.version}_en-US.tar.xz/download"
+                                        dest="${project.source.directory}/tor-browser-linux-armhf-${torbrowser.version}_en-US.tar.xz"
+                                        skipexisting="true"/>
+                                    <get
+                                        src="https://sourceforge.net/projects/tor-browser-ports/files/${torbrowser.version}-armhf/sha256sums-unsigned-build.txt/download"
+                                        dest="${project.source.directory}/tor-browser-linux-armhf-${torbrowser.version}_sha256sums-unsigned-build.txt"
+                                        skipexisting="true"/>
+                                    <get
+                                        src="https://sourceforge.net/projects/tor-browser-ports/files/${torbrowser.version}-arm64/tor-browser-linux-arm64-${torbrowser.version}_en-US.tar.xz/download"
+                                        dest="${project.source.directory}/tor-browser-linux-arm64-${torbrowser.version}_en-US.tar.xz"
+                                        skipexisting="true"/>
+                                    <get
+                                        src="https://sourceforge.net/projects/tor-browser-ports/files/${torbrowser.version}-arm64/sha256sums-unsigned-build.txt/download"
+                                        dest="${project.source.directory}/tor-browser-linux-arm64-${torbrowser.version}_sha256sums-unsigned-build.txt"
+                                        skipexisting="true"/>
+                                    <get
                                         src="https://sourceforge.net/projects/p7zip/files/p7zip/16.02/p7zip_16.02_x86_linux_bin.tar.bz2/download"
                                         dest="${project.source.directory}/p7zip.tar.bz2"
                                         skipexisting="true"/>
@@ -85,6 +101,16 @@
                                 <exec executable="gpg" failonerror="true">
                                     <arg
                                         line="--auto-key-locate keyserver --keyserver pool.sks-keyservers.net --keyserver-options auto-key-retrieve --verify ${project.source.directory}/tor-browser-linux64-${torbrowser.version}_en-US.tar.xz.asc ${project.source.directory}/tor-browser-linux64-${torbrowser.version}_en-US.tar.xz"></arg>
+                                </exec>
+                                <echo message="checking linux-armhf binary sha256sum"/>
+                                <exec executable="sh" failonerror="true">
+                                    <arg
+                                        line="-c 'cd ${project.source.directory}; grep tor-browser-linux-armhf-${torbrowser.version}_en-US.tar.xz tor-browser-linux-armhf-${torbrowser.version}_sha256sums-unsigned-build.txt | shasum -a 256 -c'"></arg>
+                                </exec>
+                                <echo message="checking linux-arm64 binary sha256sum"/>
+                                <exec executable="sh" failonerror="true">
+                                    <arg
+                                        line="-c 'cd ${project.source.directory}; grep tor-browser-linux-arm64-${torbrowser.version}_en-US.tar.xz tor-browser-linux-arm64-${torbrowser.version}_sha256sums-unsigned-build.txt | shasum -a 256 -c'"></arg>
                                 </exec>
                                 <bunzip2 src="${project.source.directory}/p7zip.tar.bz2"
                                     dest="${project.source.directory}/p7zip.tar" />
