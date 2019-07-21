@@ -82,25 +82,30 @@
                                         dest="${project.source.directory}/p7zip.tar.bz2"
                                         skipexisting="true"/>
                                 </parallel>
+                                <echo message="importing gpg key"/>
+                                <exec executable="sh" failonerror="true">
+                                    <arg
+                                        line="-c 'gpg --batch --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 0x4E2C6E8793298290 || gpg --batch --keyserver hkp://ipv4.pool.sks-keyservers.net --recv-keys 0x4E2C6E8793298290 || gpg --batch --keyserver hkp://pgp.mit.edu:80 --recv-keys 0x4E2C6E8793298290'"></arg>
+                                </exec>
                                 <echo message="checking windows binary signature"/>
                                 <exec executable="gpg" failonerror="true">
                                     <arg
-                                        line="--auto-key-locate keyserver --keyserver pool.sks-keyservers.net --keyserver-options auto-key-retrieve --verify ${project.source.directory}/torbrowser-install-${torbrowser.version}_en-US.exe.asc ${project.source.directory}/torbrowser-install-${torbrowser.version}_en-US.exe"></arg>
+                                        line="--batch --verify ${project.source.directory}/torbrowser-install-${torbrowser.version}_en-US.exe.asc ${project.source.directory}/torbrowser-install-${torbrowser.version}_en-US.exe"></arg>
                                 </exec>
                                 <echo message="checking macos binary signature"/>
                                 <exec executable="gpg" failonerror="true">
                                     <arg
-                                        line="--auto-key-locate keyserver --keyserver pool.sks-keyservers.net --keyserver-options auto-key-retrieve --verify ${project.source.directory}/TorBrowser-${torbrowser.version}-osx64_en-US.dmg.asc ${project.source.directory}/TorBrowser-${torbrowser.version}-osx64_en-US.dmg"></arg>
+                                        line="--batch --verify ${project.source.directory}/TorBrowser-${torbrowser.version}-osx64_en-US.dmg.asc ${project.source.directory}/TorBrowser-${torbrowser.version}-osx64_en-US.dmg"></arg>
                                 </exec>
                                 <echo message="checking linux32 binary signature"/>
                                 <exec executable="gpg" failonerror="true">
                                     <arg
-                                        line="--auto-key-locate keyserver --keyserver pool.sks-keyservers.net --keyserver-options auto-key-retrieve --verify ${project.source.directory}/tor-browser-linux32-${torbrowser.version}_en-US.tar.xz.asc ${project.source.directory}/tor-browser-linux32-${torbrowser.version}_en-US.tar.xz"></arg>
+                                        line="--batch --verify ${project.source.directory}/tor-browser-linux32-${torbrowser.version}_en-US.tar.xz.asc ${project.source.directory}/tor-browser-linux32-${torbrowser.version}_en-US.tar.xz"></arg>
                                 </exec>
                                 <echo message="checking linux64 binary signature"/>
                                 <exec executable="gpg" failonerror="true">
                                     <arg
-                                        line="--auto-key-locate keyserver --keyserver pool.sks-keyservers.net --keyserver-options auto-key-retrieve --verify ${project.source.directory}/tor-browser-linux64-${torbrowser.version}_en-US.tar.xz.asc ${project.source.directory}/tor-browser-linux64-${torbrowser.version}_en-US.tar.xz"></arg>
+                                        line="--batch --verify ${project.source.directory}/tor-browser-linux64-${torbrowser.version}_en-US.tar.xz.asc ${project.source.directory}/tor-browser-linux64-${torbrowser.version}_en-US.tar.xz"></arg>
                                 </exec>
                                 <echo message="checking linux-armhf binary sha256sum"/>
                                 <exec executable="sh" failonerror="true">
