@@ -34,58 +34,37 @@
                                         dest="${project.source.directory}/torbrowser-install-${torbrowser.version}_en-US.exe"
                                         skipexisting="true"/>
                                     <get
-                                        src="https://dist.torproject.org/torbrowser/${torbrowser.version}/torbrowser-install-${torbrowser.version}_en-US.exe.asc"
-                                        dest="${project.source.directory}/torbrowser-install-${torbrowser.version}_en-US.exe.asc"
-                                        skipexisting="true"/>
-                                    <get
                                         src="https://dist.torproject.org/torbrowser/${torbrowser.version}/TorBrowser-${torbrowser.version}-osx64_en-US.dmg"
                                         dest="${project.source.directory}/TorBrowser-${torbrowser.version}-osx64_en-US.dmg"
-                                        skipexisting="true"/>
-                                    <get
-                                        src="https://dist.torproject.org/torbrowser/${torbrowser.version}/TorBrowser-${torbrowser.version}-osx64_en-US.dmg.asc"
-                                        dest="${project.source.directory}/TorBrowser-${torbrowser.version}-osx64_en-US.dmg.asc"
                                         skipexisting="true"/>
                                     <get
                                         src="https://dist.torproject.org/torbrowser/${torbrowser.version}/tor-browser-linux32-${torbrowser.version}_en-US.tar.xz"
                                         dest="${project.source.directory}/tor-browser-linux32-${torbrowser.version}_en-US.tar.xz"
                                         skipexisting="true"/>
                                     <get
-                                        src="https://dist.torproject.org/torbrowser/${torbrowser.version}/tor-browser-linux32-${torbrowser.version}_en-US.tar.xz.asc"
-                                        dest="${project.source.directory}/tor-browser-linux32-${torbrowser.version}_en-US.tar.xz.asc"
-                                        skipexisting="true"/>
-                                    <get
                                         src="https://dist.torproject.org/torbrowser/${torbrowser.version}/tor-browser-linux64-${torbrowser.version}_en-US.tar.xz"
                                         dest="${project.source.directory}/tor-browser-linux64-${torbrowser.version}_en-US.tar.xz"
                                         skipexisting="true"/>
-                                    <get
-                                        src="https://dist.torproject.org/torbrowser/${torbrowser.version}/tor-browser-linux64-${torbrowser.version}_en-US.tar.xz.asc"
-                                        dest="${project.source.directory}/tor-browser-linux64-${torbrowser.version}_en-US.tar.xz.asc"
-                                        skipexisting="true"/>
-                                    <get
+                                </parallel>
+
+                                <copy todir="${project.source.directory}">
+                                    <fileset dir="${project.basedir}/checksums" />
+                                </copy>
+
+                                <condition property="checksumsMatch">
+                                    <and>
+                                        <checksum algorithm="SHA-512" file="${project.source.directory}/torbrowser-install-${torbrowser.version}_en-US.exe" />
+                                        <checksum algorithm="SHA-512" file="${project.source.directory}/TorBrowser-${torbrowser.version}-osx64_en-US.dmg" />
+                                        <checksum algorithm="SHA-512" file="${project.source.directory}/tor-browser-linux32-${torbrowser.version}_en-US.tar.xz" />
+                                        <checksum algorithm="SHA-512" file="${project.source.directory}/tor-browser-linux64-${torbrowser.version}_en-US.tar.xz" />
+                                    </and>
+                                </condition>
+                                <fail unless="checksumsMatch" />
+
+                                <get
                                         src="https://sourceforge.net/projects/p7zip/files/p7zip/16.02/p7zip_16.02_x86_linux_bin.tar.bz2/download"
                                         dest="${project.source.directory}/p7zip.tar.bz2"
                                         skipexisting="true"/>
-                                </parallel>
-                                <echo message="checking windows binary signature"/>
-                                <exec executable="gpg" failonerror="true">
-                                    <arg
-                                        line="--auto-key-locate keyserver --keyserver pool.sks-keyservers.net --keyserver-options auto-key-retrieve --verify ${project.source.directory}/torbrowser-install-${torbrowser.version}_en-US.exe.asc ${project.source.directory}/torbrowser-install-${torbrowser.version}_en-US.exe"></arg>
-                                </exec>
-                                <echo message="checking macos binary signature"/>
-                                <exec executable="gpg" failonerror="true">
-                                    <arg
-                                        line="--auto-key-locate keyserver --keyserver pool.sks-keyservers.net --keyserver-options auto-key-retrieve --verify ${project.source.directory}/TorBrowser-${torbrowser.version}-osx64_en-US.dmg.asc ${project.source.directory}/TorBrowser-${torbrowser.version}-osx64_en-US.dmg"></arg>
-                                </exec>
-                                <echo message="checking linux32 binary signature"/>
-                                <exec executable="gpg" failonerror="true">
-                                    <arg
-                                        line="--auto-key-locate keyserver --keyserver pool.sks-keyservers.net --keyserver-options auto-key-retrieve --verify ${project.source.directory}/tor-browser-linux32-${torbrowser.version}_en-US.tar.xz.asc ${project.source.directory}/tor-browser-linux32-${torbrowser.version}_en-US.tar.xz"></arg>
-                                </exec>
-                                <echo message="checking linux64 binary signature"/>
-                                <exec executable="gpg" failonerror="true">
-                                    <arg
-                                        line="--auto-key-locate keyserver --keyserver pool.sks-keyservers.net --keyserver-options auto-key-retrieve --verify ${project.source.directory}/tor-browser-linux64-${torbrowser.version}_en-US.tar.xz.asc ${project.source.directory}/tor-browser-linux64-${torbrowser.version}_en-US.tar.xz"></arg>
-                                </exec>
                                 <bunzip2 src="${project.source.directory}/p7zip.tar.bz2"
                                     dest="${project.source.directory}/p7zip.tar" />
                                 <untar src="${project.source.directory}/p7zip.tar"
